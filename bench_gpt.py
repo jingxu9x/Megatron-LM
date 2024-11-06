@@ -121,6 +121,7 @@ def get_batch(data_iterator):
 
     args = get_args()
     tokenizer = get_tokenizer()
+    v = tokenizer.vocab_size
     
     dev = torch.cuda.current_device()
     b = args.micro_batch_size
@@ -128,11 +129,11 @@ def get_batch(data_iterator):
     h = args.hidden_size
 
     batch = {
-        "tokens": torch.randint(0, tokenizer.vocab_size, (b, s), dtype=torch.int64, device=dev),
-        "labels": torch.randint(0, tokenizer.vocab_size, (b, s), dtype=torch.int64, device=dev),
-        "loss_mask": torch.empty((b, s), dtype=torch.float32, device=dev),
-        "attention_mask": torch.empty((b, 1, s, s), dtype=torch.bool, device=dev) if args.create_attention_mask_in_dataloader else None,
-        "position_ids": torch.empty((b, s), dtype=torch.int64, device=dev)
+        "tokens": torch.randint(0, v, (b, s), dtype=torch.int64, device=dev),
+        "labels": torch.randint(0, v, (b, s), dtype=torch.int64, device=dev),
+        "loss_mask": torch.randint(0, 2, (b, s), dtype=torch.float32, device=dev),
+        "attention_mask": torch.ones((b, 1, s, s), dtype=torch.bool, device=dev) if args.create_attention_mask_in_dataloader else None,
+        "position_ids": torch.randint(0, s, (b, s), dtype=torch.int64, device=dev)
     }
 
     return batch.values()

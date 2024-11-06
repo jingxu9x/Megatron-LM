@@ -27,11 +27,11 @@ DISTRIBUTED_ARGS=(
 )
 
 GPT_MODEL_ARGS=(
-    --num-layers 32 
+    --num-layers 12 
     --hidden-size 2560 
     --num-attention-heads 20 
-    --seq-length 2048 
-    --max-position-embeddings 2048 
+    --seq-length 1024 
+    --max-position-embeddings 1024 
 )
 
 TRAINING_ARGS=(
@@ -56,7 +56,7 @@ MODEL_PARALLEL_ARGS=(
 	--pipeline-model-parallel-size 1 
 
     # mask below if install apex, TE
-    --transformer-impl local
+    # --transformer-impl local
     # --no-gradient-accumulation-fusion
 )
 
@@ -69,6 +69,7 @@ DATA_ARGS=(
 
 EVAL_AND_LOGGING_ARGS=(
     --log-interval 1
+    --log-throughput
     --eval-interval 1000
     --eval-iters 10
     --tensorboard-dir $TENSORBOARD_LOGS_PATH 
